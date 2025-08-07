@@ -9,9 +9,6 @@ from werkzeug.utils import secure_filename
 import boto3
 import re
 import fitz
-import threading
-import uuid
-
 
 jobs = {} 
 
@@ -31,9 +28,6 @@ UPLOAD_FOLDER = "uploads"
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
 
-import threading
-import uuid
-
 @app.route("/upload", methods=["POST"])
 def upload_pdf():
     if "file" not in request.files:
@@ -44,19 +38,8 @@ def upload_pdf():
     filepath = os.path.join(UPLOAD_FOLDER, filename)
     file.save(filepath)
 
-    job_id = str(uuid.uuid4())
-    jobs[job_id] = {"cancel": False, "result": None}
-
-    def job_function():
-        html_content = process_pdf(filepath)
-        jobs[job_id]["result"] = html_content
-
-    t = threading.Thread(target=job_function)
-    jobs[job_id]["thread"] = t
-    t.start()
-
-    return jsonify({"job_id": job_id}), 202
-
+    html_content = process_pdf(filepath)
+    return jsonify({"html": html_content}), 202
 
 
 @app.route("/cancel/<job_id>", methods=["POST"])
@@ -297,10 +280,6 @@ def process_pdf(pdf_path):
 
 if __name__ == "__main__":
     app.run(debug=True, host="0.0.0.0")
-
-
-
-
 
 
 
