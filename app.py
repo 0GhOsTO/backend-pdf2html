@@ -32,6 +32,7 @@ os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
 @app.route("/upload", methods=["POST"])
 def upload_pdf():
+    print("Origin header received:", request.headers.get("Origin"))
     if "file" not in request.files:
         return jsonify({"error": "No file uploaded"}), 400
 
@@ -284,6 +285,7 @@ def process_pdf(pdf_path):
 
 if __name__ == "__main__":
     app.run(debug=True, host="0.0.0.0")
+
 
 
 
