@@ -42,26 +42,6 @@ def upload_pdf():
     return jsonify({"html": html_content}), 202
 
 
-@app.route("/cancel/<job_id>", methods=["POST"])
-def cancel_job(job_id):
-    if job_id in jobs:
-        jobs[job_id]["cancel"] = True
-        return jsonify({"status": "cancelled"})
-    else:
-        return jsonify({"error": "Invalid job ID"}), 400
-
-@app.route("/result/<job_id>")
-def get_result(job_id):
-    if job_id in jobs:
-        result = jobs[job_id]["result"]
-        if result is not None:
-            return jsonify({"html": result, "status": "done"})
-        else:
-            return jsonify({"status": "processing"})
-    else:
-        return jsonify({"error": "Invalid job ID"}), 400
-
-
 def cellText(cell, block_map):
     text = ""
     if "Relationships" in cell:
