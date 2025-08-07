@@ -9,6 +9,7 @@ from werkzeug.utils import secure_filename
 import boto3
 import re
 import fitz
+import uuid
 
 jobs = {} 
 
@@ -38,8 +39,12 @@ def upload_pdf():
     filepath = os.path.join(UPLOAD_FOLDER, filename)
     file.save(filepath)
 
+    job_id = str(uuid.uuid4())
     html_content = process_pdf(filepath)
-    return jsonify({"html": html_content}), 200
+    jobs[job_id] = {"cancel": False, "result": html_content}
+
+    # Return BOTH job_id and html together:
+    return jsonify({"job_id": job_id, "html": html_content}), 200
 
 
 def cellText(cell, block_map):
@@ -260,9 +265,6 @@ def process_pdf(pdf_path):
 
 if __name__ == "__main__":
     app.run(debug=True, host="0.0.0.0")
-
-
-
 
 
 
