@@ -12,7 +12,7 @@ import fitz
 import threading
 import uuid
 
-jobs = {}  # job_id -> {"thread": thread, "cancel": False, "result": None}
+jobs = {} 
 
 aws_access_key_id = os.environ.get("AWS_ACCESS_KEY_ID")
 aws_secret_access_key = os.environ.get("AWS_SECRET_ACCESS_KEY")
@@ -22,8 +22,7 @@ bucket_name = os.environ.get("BUCKET_NAME")
 
 #Initialize Flask
 app = Flask(__name__)
-CORS(app)
-#CORS(app, origins=["https://your-frontend.vercel.app"])
+CORS(app, origins=["https://frontend-pdf2html.vercel.app/"])
 
 #Make the file uploadable
 UPLOAD_FOLDER = "uploads"
@@ -294,4 +293,5 @@ def process_pdf(pdf_path, job_id):
     return htmlConvert
 
 if __name__ == "__main__":
+
     app.run(debug=True, host="0.0.0.0")
