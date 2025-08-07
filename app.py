@@ -44,7 +44,7 @@ def upload_pdf():
     jobs[job_id] = {"cancel": False, "result": html_content}
 
     # Return BOTH job_id and html together:
-    return jsonify({"job_id": job_id, "html": html_content}), 200
+    return jsonify({"job_id": job_id, "html": html_content}), 202
 
 
 def cellText(cell, block_map):
@@ -265,6 +265,7 @@ def process_pdf(pdf_path):
 
 if __name__ == "__main__":
     app.run(debug=True, host="0.0.0.0")
+
 
 
 
