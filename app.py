@@ -1,7 +1,3 @@
-#apt-get intall -y poppler utils
-#pip install pdf2image
-#pip install boto3
-
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 import os
@@ -285,6 +281,6 @@ def process_pdf(pdf_path, job_id):
     return htmlConvert
 
 if __name__ == "__main__":
-
     app.run(debug=True, host="0.0.0.0")
+
 
