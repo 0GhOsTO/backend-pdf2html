@@ -39,7 +39,7 @@ def upload_pdf():
     file.save(filepath)
 
     html_content = process_pdf(filepath)
-    return jsonify({"html": html_content}), 202
+    return jsonify({"html": html_content}), 200
 
 
 def cellText(cell, block_map):
@@ -260,6 +260,7 @@ def process_pdf(pdf_path):
 
 if __name__ == "__main__":
     app.run(debug=True, host="0.0.0.0")
+
 
 
 
