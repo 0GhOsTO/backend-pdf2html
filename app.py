@@ -1,3 +1,7 @@
+#apt-get intall -y poppler utils
+#pip install pdf2image
+#pip install boto3
+
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 import os
@@ -10,20 +14,24 @@ import uuid
 
 jobs = {} 
 
+
+
+
 aws_access_key_id = os.environ.get("AWS_ACCESS_KEY_ID")
 aws_secret_access_key = os.environ.get("AWS_SECRET_ACCESS_KEY")
 region_name = os.environ.get("AWS_REGION")
 bucket_name = os.environ.get("BUCKET_NAME")
 
-
 #Initialize Flask
 app = Flask(__name__)
 CORS(app, origins=["https://frontend-pdf2html.vercel.app/"])
+#Testing: http://localhost:5173/
+#Reality: https://frontend-pdf2html.vercel.app/
 
 #Make the file uploadable
 UPLOAD_FOLDER = "uploads"
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
-print("file directory created")
+
 
 @app.route("/upload", methods=["POST"])
 def upload_pdf():
@@ -35,9 +43,7 @@ def upload_pdf():
     filepath = os.path.join(UPLOAD_FOLDER, filename)
     file.save(filepath)
 
-    # Just process and return
-    print("Processing the filepath started")
-    html_content = process_pdf(filepath, None)
+    html_content = process_pdf(filepath)
     return jsonify({"html": html_content}), 202
 
 
@@ -72,7 +78,7 @@ def cellText(cell, block_map):
                         text += word["Text"] + " "
     return text.strip()
 
-def process_pdf(pdf_path, job_id):
+def process_pdf(pdf_path):
     print("Running pdf_path right now: ")
     
     pages_dir = "pages"
@@ -163,10 +169,6 @@ def process_pdf(pdf_path, job_id):
 
     for file in files:
         # Get Textract analysis
-        if jobs[job_id]["cancel"]:
-            print("Job Cancelled before processing")
-            return "<p>Job cancelled<p>"
-
         print("Running textract on: ", file)
 
         layoutAnalysis = textract.analyze_document(
@@ -283,6 +285,7 @@ def process_pdf(pdf_path, job_id):
 
 if __name__ == "__main__":
     app.run(debug=True, host="0.0.0.0")
+
 
 
 
