@@ -22,7 +22,7 @@ bucket_name = os.environ.get("BUCKET_NAME")
 
 #Initialize Flask
 app = Flask(__name__)
-CORS(app, origins=["https://frontend-pdf2html.vercel.app/"])
+CORS(app, origins=["https://frontend-pdf2html.vercel.app"])
 
 #Make the file uploadable
 UPLOAD_FOLDER = "uploads"
@@ -39,18 +39,10 @@ def upload_pdf():
     filepath = os.path.join(UPLOAD_FOLDER, filename)
     file.save(filepath)
 
-    job_id = str(uuid.uuid4())
-    jobs[job_id] = {"cancel": False, "result": None}
+    # Just process and return
+    html_content = process_pdf(filepath, None)
+    return jsonify({"html": html_content}), 200
 
-    def job_function():
-        html_content = process_pdf(filepath, job_id)
-        jobs[job_id]["result"] = html_content
-
-    t = threading.Thread(target=job_function)
-    jobs[job_id]["thread"] = t
-    t.start()
-
-    return jsonify({"job_id": job_id}), 202
 
 @app.route("/cancel/<job_id>", methods=["POST"])
 def cancel_job(job_id):
@@ -295,3 +287,4 @@ def process_pdf(pdf_path, job_id):
 if __name__ == "__main__":
 
     app.run(debug=True, host="0.0.0.0")
+
