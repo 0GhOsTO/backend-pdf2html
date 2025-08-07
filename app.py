@@ -20,7 +20,6 @@ bucket_name = os.environ.get("BUCKET_NAME")
 #Initialize Flask
 app = Flask(__name__)
 CORS(app, origins=["https://frontend-pdf2html.vercel.app", "https://frontend-pdf2html-git-master-andrew-chos-projects-415cbbd8.vercel.app/", "https://frontend-pdf2html-fskhd9ppm-andrew-chos-projects-415cbbd8.vercel.app/"])
-print("Received request from Origin:", request.headers.get('Origin'))
 print("CORS accepted")
 
 #Testing: http://localhost:5173/
@@ -285,6 +284,7 @@ def process_pdf(pdf_path):
 
 if __name__ == "__main__":
     app.run(debug=True, host="0.0.0.0")
+
 
 
 
