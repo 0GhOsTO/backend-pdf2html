@@ -9,13 +9,8 @@ from werkzeug.utils import secure_filename
 import boto3
 import re
 import fitz
-import threading
-import uuid
 
 jobs = {} 
-
-
-
 
 aws_access_key_id = os.environ.get("AWS_ACCESS_KEY_ID")
 aws_secret_access_key = os.environ.get("AWS_SECRET_ACCESS_KEY")
@@ -285,7 +280,4 @@ def process_pdf(pdf_path):
 
 if __name__ == "__main__":
     app.run(debug=True, host="0.0.0.0")
-
-
-
 
