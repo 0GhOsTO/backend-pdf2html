@@ -41,7 +41,9 @@ def upload_pdf():
     file.save(filepath)
 
     html_content = process_pdf(filepath)
-    return jsonify({"html": html_content}), 202
+    jsoned = jsonify({"html": html_content})
+    print("jsoned:", jsoned)
+    return jsoned, 202
 
 
 @app.route("/cancel/<job_id>", methods=["POST"])
@@ -282,5 +284,6 @@ def process_pdf(pdf_path):
 
 if __name__ == "__main__":
     app.run(debug=True, host="0.0.0.0")
+
 
 
